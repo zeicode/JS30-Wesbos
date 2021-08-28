@@ -27,6 +27,16 @@
       misc styles, nothing to do with CSS variables
     */
 
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --spacing: 10px;
+      --blur: 10px;
+      --base: #ffc600;
+    }
+
     body {
       text-align: center;
       background: #193549;
@@ -43,10 +53,31 @@
     input {
       width: 100px;
     }
+
+    img {
+      border: var(--spacing) solid var(--base);
+      filter: blur(var(--blur))
+    }
   </style>
 
   <script>
-    const helloworld = "hello"
+    const controlsDOM = document.querySelector('.controls')
+
+    function controls(e) {
+      let controlName = e.target.name
+      let controlValue = e.target.value
+      // if (controlName === 'base') {
+      //   document.documentElement.style.setProperty(`--${controlName}`, `${controlValue}`)
+      // }
+      // if (controlName === 'spacing' || controlName === 'blur') {
+      //   document.documentElement.style.setProperty(`--${controlName}`, `${controlValue}px`)
+      // }
+      document.documentElement.style.setProperty(`--${controlName}`, `${controlName === 'base' ? controlValue : controlValue + 'px'}`)
+
+    }
+
+    controlsDOM.addEventListener('input', controls)
+
   </script>
 
 </body>
