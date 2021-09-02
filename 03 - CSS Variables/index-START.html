@@ -73,11 +73,9 @@
       //   document.documentElement.style.setProperty(`--${controlName}`, `${controlValue}px`)
       // }
       document.documentElement.style.setProperty(`--${controlName}`, `${controlName === 'base' ? controlValue : controlValue + 'px'}`)
-
     }
 
     controlsDOM.addEventListener('input', controls)
-
   </script>
 
 </body>
