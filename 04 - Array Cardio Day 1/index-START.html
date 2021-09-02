@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Array Cardio 💪</title>
 </head>
+
 <body>
   <p><em>Psst: have a look at the JavaScript Console</em> 💁</p>
   <script>
@@ -34,32 +36,69 @@
       'Berne, Eric', 'Berra, Yogi', 'Berry, Wendell', 'Bevan, Aneurin', 'Ben-Gurion, David', 'Bevel, Ken', 'Biden, Joseph', 'Bennington, Chester', 'Bierce, Ambrose',
       'Billings, Josh', 'Birrell, Augustine', 'Blair, Tony', 'Beecher, Henry', 'Biondo, Frank'
     ];
-    
+
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+
+    const inventors1500 = inventors.filter(({ year }) => year >= 1500 && year < 1600)
+    console.table(inventors1500)
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
 
+    const inventorsFirsLastNames = inventors.map(({ first, last }) => `${first} ${last}`)
+    console.log(inventorsFirsLastNames)
+
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    //  MADE A MISTAKE HERE!! OLDEST WOULD BE a - b OOOps. 
+    const inventorsBirthdaySort = inventors.sort((a, b) => b.year - a.year)
+    console.table(inventorsBirthdaySort)
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live all together?
+    // ANOTHER MISTAKE IN CONCEPT should be (passed - year) bc it is 'years lived' like in the next 
+    // exercies and in the parameters should be {year, passed}
+    const inventorsYearsTotal = inventors.reduce((total, { year }) => {
+      return total += year
+    }, 0)
+    console.log(inventorsYearsTotal)
 
     // 5. Sort the inventors by years lived
+    // MISTAKE: b should go before a for correct order and 'year' NOT 'years' ??Don't understand
+    // why 'years' didn't throw an error?? Looks like it returned the same answer as inventors.sort()
+    const inventorsYearsLived = inventors.sort((a, b) => (a.passed - a.years) - (b.passed - b.years))
+    console.table(inventorsYearsLived)
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
 
+    // HAD NO IDEA HOW TO DO THIS, DIDN'T KNOW I COULD QUERYSELECT FROM ANOTHER SITE
+    // boulevards.filter(boulevard => boulevard.match(/de./i))
+
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    // const peopleLastName = people.sort()
+    // console.log(peopleLastName)
+
+
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
-    const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+    const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck'];
 
+    const dataSum = new Set(data)
+    console.log(dataSum)
+    // GOT TO THE LOGIC MORE OR LESS BUT COULDN'T FIGURE OUT 
+    // HOW TO FINISH. REALIZED I AM NOT SO CLEAR ON ADDING TO OBJECTS
+    const itemSum = data.reduce((obj, item) => {
+      if (!obj[item]) {
+        obj.item = 0
+      }
+      return obj
+    }, {})
   </script>
 </body>
+
 </html>

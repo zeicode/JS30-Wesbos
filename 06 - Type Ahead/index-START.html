@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Type Ahead 👀</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <form class="search-form">
@@ -14,9 +16,63 @@
       <li>or a state</li>
     </ul>
   </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  <script>
+    // url
+    const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+    // define DOM elements
+    const suggestions = document.querySelector('.suggestions')
+    const form = document.querySelector('.search-form')
+    const input = document.querySelector('.search')
 
-</script>
+    // fetch data from url
+    const getData = async (url) => {
+      try {
+        const response = await fetch(url)
+        const data = await response.json()
+        return data
+      } catch (error) {
+        console.log('something went wrong with the link')
+      }
+    }
+
+    // Filter according to input
+    const filterData = async () => {
+      if (input.value === '') {
+        location.reload()
+      }
+      const data = await getData(endpoint)
+      const regex = new RegExp(input.value, "gi")
+      const filteredData = data.filter(({ city, state }) => {
+        return (city.match(regex) || state.match(regex))
+      })
+      displayData(filteredData)
+    }
+
+    // add span and class to highlight search letters
+    const highlight = (word) => {
+      const value = input.value
+      const regex = new RegExp(value, "gi")
+      let hlWord = word.replace(regex, `<span class=
+      "hl">${value}</span>`)
+      return hlWord
+    }
+    // Could have made a separate function but decided to leave inline
+    // const commas = (string) => {
+    //   let number = parseInt(string)
+    //   return number.toLocaleString("en-US")
+    // }
+
+    // display filtered data
+    const displayData = (filteredData) => {
+      if (filteredData.length === 0) {
+        return suggestions.innerHTML = `<li>sorry, no city or state was found with those letters</li>`
+      }
+      suggestions.innerHTML = filteredData.map((x) => {
+        return `<li><p>${highlight(x.city)}, ${highlight(x.state)}</p><span class="popultion">${parseInt(x.population).toLocaleString("en-US")}</span></li>`
+      }).join('')
+    }
+    form.addEventListener('keyup', filterData)
+  </script>
 </body>
+
 </html>
