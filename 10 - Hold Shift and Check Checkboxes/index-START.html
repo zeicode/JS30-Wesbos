@@ -100,6 +100,7 @@
     const inbox = document.querySelector('.inbox')
     const input = [...document.querySelectorAll('input[type=checkbox]')]
 
+    // call function if shift is held down
     function keyDownEvent(e) {
       if (e.keyCode === 16) {
         inbox.addEventListener('click', clickEvent)
@@ -108,6 +109,7 @@
       }
     }
 
+    // call function if input is clicked in combination with shift
     function clickEvent(f) {
       if (f.target.localName === "input") {
         shift(f)
@@ -117,16 +119,42 @@
     }
 
     function shift(f) {
-      const checkedBox = input.findIndex(element => element.checked === true)
+      // find the indexes of the checked boxes
+      const checkedBox = input.map((input, index) => input.checked === true ? index : -1).filter(element => element !== -1)
+      console.log(checkedBox)
+      // index of the shift+click box
       const currentBox = input.indexOf(f.target)
+      console.log(currentBox)
+      // change all checkboxes between the shift+click box and the next checkbox above or below (DOESN'T TAKE INTO ACCOUNT WHEN shift+click IS IN THE MIDDLE)
       input.map(item => {
-        if (input.indexOf(item) > checkedBox && input.indexOf(item) < currentBox) {
-          return item.checked = "true"
+        const itemIndex = input.indexOf(item)
+        const last = checkedBox[checkedBox.length - 1]
+        const secondLast = checkedBox[checkedBox.length - 2]
+        // only one checked box besides shift+click
+        if (checkedBox.length === 2) {
+          if (itemIndex > checkedBox[0] && itemIndex < currentBox) {
+            return item.checked = "true"
+          }
+          if (itemIndex > currentBox && itemIndex < checkedBox[1]) {
+            return item.checked = "true"
+          }
+        }
+        // multiple checked box besides shift+click
+        if (checkedBox.length > 2 && currentBox === checkedBox[0]) {
+          if (itemIndex > currentBox && itemIndex < checkedBox[1]) {
+            return item.checked = "true"
+          }
+        }
+        if (checkedBox.length > 2 && currentBox === last) {
+          if (itemIndex > secondLast && itemIndex < currentBox) {
+            return item.checked = "true"
+          }
         }
       })
     }
 
     window.addEventListener('keydown', keyDownEvent)
+    // removes click event once the shift button is released
     window.addEventListener('keyup', () => { inbox.removeEventListener('click', clickEvent) })
 
 
