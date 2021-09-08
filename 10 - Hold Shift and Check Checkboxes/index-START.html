@@ -121,37 +121,45 @@
     function shift(f) {
       // find the indexes of the checked boxes
       const checkedBox = input.map((input, index) => input.checked === true ? index : -1).filter(element => element !== -1)
-      console.log(checkedBox)
       // index of the shift+click box
       const currentBox = input.indexOf(f.target)
-      console.log(currentBox)
-      // change all checkboxes between the shift+click box and the next checkbox above or below (DOESN'T TAKE INTO ACCOUNT WHEN shift+click IS IN THE MIDDLE)
-      input.map(item => {
-        const itemIndex = input.indexOf(item)
-        const last = checkedBox[checkedBox.length - 1]
-        const secondLast = checkedBox[checkedBox.length - 2]
-        // only one checked box besides shift+click
-        if (checkedBox.length === 2) {
-          if (itemIndex > checkedBox[0] && itemIndex < currentBox) {
-            return item.checked = "true"
-          }
-          if (itemIndex > currentBox && itemIndex < checkedBox[1]) {
-            return item.checked = "true"
-          }
-        }
-        // multiple checked box besides shift+click
-        if (checkedBox.length > 2 && currentBox === checkedBox[0]) {
-          if (itemIndex > currentBox && itemIndex < checkedBox[1]) {
-            return item.checked = "true"
-          }
-        }
-        if (checkedBox.length > 2 && currentBox === last) {
-          if (itemIndex > secondLast && itemIndex < currentBox) {
-            return item.checked = "true"
-          }
-        }
-      })
+
+      // console.log(checkedBox)
+      // console.log(currentBox)
+
+      // when only one checked box besides the shift+click
+      let addChecks = []
+      const last = checkedBox[checkedBox.length - 1]
+      const secondLast = checkedBox[checkedBox.length - 2]
+      if (checkedBox.length === 2) {
+        addChecks = input.slice(checkedBox[0], checkedBox[1])
+      }
+      if (checkedBox.length > 2 && currentBox === checkedBox[0]) {
+        addChecks = input.slice(checkedBox[0], checkedBox[1])
+      }
+      if (checkedBox.length > 2 && currentBox === last) {
+        addChecks = input.slice(secondLast, last)
+      }
+      addChecks.forEach(input => input.checked = "true")
     }
+    // change all checkboxes between the shift+click box and the next checkbox above or below (DOESN'T TAKE INTO ACCOUNT WHEN shift+click IS IN THE MIDDLE)
+    //   input.map(item => {
+    //     const itemIndex = input.indexOf(item)
+    //     const last = checkedBox[checkedBox.length - 1]
+    //     const secondLast = checkedBox[checkedBox.length - 2]
+    //     // multiple checked box besides shift+click
+    //     if (checkedBox.length > 2 && currentBox === checkedBox[0]) {
+    //       if (itemIndex > currentBox && itemIndex < checkedBox[1]) {
+    //         return item.checked = "true"
+    //       }
+    //     }
+    //     if (checkedBox.length > 2 && currentBox === last) {
+    //       if (itemIndex > secondLast && itemIndex < currentBox) {
+    //         return item.checked = "true"
+    //       }
+    //     }
+    //   })
+    // }
 
     window.addEventListener('keydown', keyDownEvent)
     // removes click event once the shift button is released
